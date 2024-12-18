@@ -20,7 +20,7 @@ The following files are part of this repository:
 
 - `skills.py`  
 The code for this program.
-- `skills-list.csv` 
+- `skills-list.csv`  
 CSV file with a list of skills and their codes.
 - `data`  
 This folder contains a number of data files. The files have been downloaded from [O*NET Resource Center](https://www.onetcenter.org/database.html), version 29.1 ([license](https://creativecommons.org/licenses/by/4.0/)). The file currently used in the code is `Skills.xlsx`. Additionally, there are two files in this folder:
