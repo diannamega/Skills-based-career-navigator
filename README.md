@@ -2,6 +2,19 @@
 
 This is a starter repository for projects in the CAS502 class in the School of Complex Adaptive Systems at Arizona State University. If you choose to use the code in this repository for your project, please clone it into your own account and work with your clone.
 
+## What the code does
+
+This script will read the skills in `data/Skills.xlsx` (which is pretty much a list of types of jobs and what skills each job requires) and create a weighted graph from it. Each skill is identified by an "Element ID" of the form `Number.Letter.Number.letter` (e.g. `2.A.1.a`). The script will create a node for each skill id and if two skills are used in the same job type, the nodes will be connected. The more often two skills are used together for a job type, the greater the weight on the edge between those two nodes. The resulting network looks something like that (darker and thicker edges have more weight):
+![Network Image](img/networkjpg.jpg)
+
+After creating the network, the script will ask the user for a skill id and then print the first 10 skills most often used with the entered skill and 5 job types in which both skills are used, e.g.
+
+```
+Often used skills with "Active Learning (2.A.2.b)":
+"Active Listening (2.A.1.b)" e.g. as Judges, Magistrate Judges, and Magistrates (5.0), Marriage and Family Therapists (4.88), Child, Family, and School Social Workers (4.88), Editors (4.88), Historians (4.75)
+...
+```
+
 ## Set up
 
 To set up the project, clone the repository. You need the following packages installed:
