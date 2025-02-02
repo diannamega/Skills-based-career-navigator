@@ -17,15 +17,15 @@ By addressing these issues, we aim to promote better alignment between individua
 
 # Basic Functionality Features
 
-Interactive Skill Matching: Interactive Skill Matching allows users to input their skills and interests, then matches them with relevant occupations and educational paths. This dynamic tool helps users explore career options and identify potential skill gaps they may need to address.
-Occupation Exploration: Occupation Exploration provides detailed insights into various occupations, including required skills, projected growth, and potential salary ranges. This feature enables users to research potential career paths and make informed decisions.
-Personalized Skills Development Roadmap: Personalized Skills Development Roadmap creates a tailored plan for users to acquire the necessary skills for their target occupation, including recommendations for courses, certifications, and other learning resources. This feature helps users bridge their skill gaps and enhance their employability.
+- **Interactive Skill Matching:** Interactive Skill Matching allows users to input their skills and interests, then matches them with relevant occupations and educational paths. This dynamic tool helps users explore career options and identify potential skill gaps they may need to address.
+- **Occupation Exploration:** Occupation Exploration provides detailed insights into various occupations, including required skills, projected growth, and potential salary ranges. This feature enables users to research potential career paths and make informed decisions.
+- **Personalized Skills Development Roadmap:** Personalized Skills Development Roadmap creates a tailored plan for users to acquire the necessary skills for their target occupation, including recommendations for courses, certifications, and other learning resources. This feature helps users bridge their skill gaps and enhance their employability.
 
 # Nice to Have Functionality Features
 
-Educational Pathway Guidance: Educational Pathway Guidance makes recommendations on potential educational paths, including college majors and vocational programs, based on a user's chosen career interests and skillset. This helps users identify programs that will best prepare them for their desired field.
-Regional Workforce Analysis: Regional Workforce Analysis allows users to explore skill demands and occupation trends within specific geographic areas. This feature helps individuals and institutions understand local labor market dynamics and make informed decisions based on regional needs.
-Policy Recommendation Generation: Policy Recommendation Generation analyzes skills gaps and future workforce needs to suggest policy recommendations, such as developing targeted education programs or workforce development initiatives.
+- **Educational Pathway Guidance:** Educational Pathway Guidance makes recommendations on potential educational paths, including college majors and vocational programs, based on a user's chosen career interests and skillset. This helps users identify programs that will best prepare them for their desired field.
+- **Regional Workforce Analysis:** Regional Workforce Analysis allows users to explore skill demands and occupation trends within specific geographic areas. This feature helps individuals and institutions understand local labor market dynamics and make informed decisions based on regional needs.
+- **Policy Recommendation Generation:** Policy Recommendation Generation analyzes skills gaps and future workforce needs to suggest policy recommendations, such as developing targeted education programs or workforce development initiatives.
 
 # Skills Exploration Tools
 
