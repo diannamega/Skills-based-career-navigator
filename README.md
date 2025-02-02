@@ -6,13 +6,16 @@ Ken Nelson and Dianna Mega
 # Project Description
 
 The problem we're tackling is the disconnect between individuals and the evolving job market. This disconnect leads to several issues:
-For Students: High schoolers often lack the resources to make informed decisions about college majors or career paths, leading to potential wasted time and money on unsuitable education.
-For Career Changers: Individuals seeking new careers struggle to identify roles that align with their existing skills, hindering efficient job searching and career transitions.
-For Educational Institutions: Trade schools and universities may find it challenging to keep their curriculum aligned with the skills demanded by emerging industries, potentially leaving graduates ill-prepared for the workforce.
+
+- **For Students:** High schoolers often lack the resources to make informed decisions about college majors or career paths, leading to potential wasted time and money on unsuitable education.
+- **For Career Changers:** Individuals seeking new careers struggle to identify roles that align with their existing skills, hindering efficient job searching and career transitions.
+- **For Educational Institutions:** Trade schools and universities may find it challenging to keep their curriculum aligned with the skills demanded by emerging industries, potentially leaving graduates ill-prepared for the workforce.
+
 This project aims to bridge this gap by creating a tool that:
-Empowers individuals to make data-driven decisions about their education and career paths.
-Facilitates efficient career transitions by matching existing skills to in-demand jobs.
-Enables educational institutions to adapt their curriculum to meet future workforce needs.
+- Empowers individuals to make data-driven decisions about their education and career paths.
+- Facilitates efficient career transitions by matching existing skills to in-demand jobs.
+- Enables educational institutions to adapt their curriculum to meet future workforce needs.
+
 By addressing these issues, we aim to promote better alignment between individual skills and labor market demands, leading to more fulfilling careers and a more efficient workforce.
 
 # Basic Functionality Features
