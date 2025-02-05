@@ -1,7 +1,8 @@
 # Skills-Based Career Navigator
 # Team Members
 
-Ken Nelson and Dianna Mega
+Ken Nelson
+Dianna Mega
 
 # Project Description
 
