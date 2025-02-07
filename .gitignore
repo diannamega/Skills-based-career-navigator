@@ -10,10 +10,6 @@ yarn-error.log*
 # out
 *.out
 
-# Excel
-*.xlsx
-*.csv
-
 # Runtime data
 pids
 *.pid
