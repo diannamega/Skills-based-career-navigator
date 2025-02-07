@@ -7,4 +7,3 @@ To foster effective collaboration and communication, we plan to implement a mult
 Team members will commit to the same branch and use pull request to update all information throughout the project.
 
 
-# ANother test
