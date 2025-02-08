@@ -50,10 +50,10 @@ Often used skills with "Active Learning (2.A.2.b)":
 ## Set up
 
 To set up the project, clone the repository. You need the following packages installed:
-- pandas
-- openpyxl
-- networkx
-- matplotlib
+- [pandas](https://pandas.pydata.org/)
+- [openpyxl](https://openpyxl.readthedocs.io/en/2.5/index.html)
+- [networkx](https://networkx.org/)
+- [matplotlib](https://matplotlib.org/)
 
 ## How to run the code
 
