@@ -1,3 +1,0 @@
-# Dependecies
-
-pandas==2.2.3
