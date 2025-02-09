@@ -1,72 +1,161 @@
 import pandas as pd
 import networkx as nx
-import matplotlib.pyplot as plt
+import os
+from prettytable import PrettyTable
+
+def load_and_preprocess_data(data_dir):
+    #   Loads and preprocesses the CSV files from the specified directory.
+    data = {}
+    soft_skills_list = []
+    try:
+        for filename in os.listdir(data_dir):
+            if filename.endswith(".csv"):
+                skill_name = filename[:-4]  # Remove ".csv" to get skill name
+                filepath = os.path.join(data_dir, filename)
+                df = pd.read_csv(filepath)
+
+                # Clean the Skills Covered, and convert it to a numeric
+                df['Skills Covered'] = df['Skills Covered'].astype(str).str.replace('%', '', regex=False).astype(float) / 100
+                data[skill_name] = df
+                soft_skills_list.append(skill_name)
+    except FileNotFoundError:
+        print(f"Error: Directory not found: {data_dir}")
+        return None, None
+    except Exception as e:
+        print(f"Error loading data from {data_dir}: {e}")
+        return None, None
+
+    return data, soft_skills_list
+
+def create_career_network(data):
+    # Creates a career network graph, linking Occupations based on shared skills.    
+    G = nx.Graph()
+
+    # 1. Add nodes for each unique occupation (using Occupation as the node identifier)
+    all_occupations = set()
+    for skill_df in data.values():
+        for occupation in skill_df['Occupation'].unique():
+            all_occupations.add(occupation)
+
+    for occupation in all_occupations:
+        G.add_node(occupation)  # Add the occupation if it is new
+
+    # 2. Add edges between Occupations sharing a Code
+    for skill, skill_df in data.items():
+      #For each CSV file
+        for index, row in skill_df.iterrows():
+            #For each row in a single CSV File
+            occupation = row['Occupation']
+            code = row['Code']
+
+            # Find other occupations with the same code
+            for other_skill, other_skill_df in data.items():
+                for other_index, other_row in other_skill_df.iterrows():
+                    if row is not other_row:
+                        other_occupation = other_row['Occupation']
+                        other_code = other_row['Code']
+                        #Connect the ones that share a code and has an edge!
+                        if (code == other_code) and (occupation in G.nodes() and other_occupation in G.nodes()):
+                            if not G.has_edge(occupation, other_occupation):
+                                G.add_edge(occupation, other_occupation)
+
+    # 3. Populate the 'skills' attribute for each occupation (AFTER creating edges)
+    for skill, skill_df in data.items():
+        for occupation in skill_df['Occupation'].unique():
+            if occupation in G.nodes():
+                G.nodes[occupation]['skills'] = []
+
+    #Now update it!
+    for skill, skill_df in data.items():
+        for occupation in skill_df['Occupation'].unique():
+            if occupation in G.nodes():
+                G.nodes[occupation]['skills'].append(skill)
+    return G
+
+def calculate_overall_match(G, user_skills, data):
+    #   Calculate overall match scores based on the created network and Skills Covered.
+    occupation_scores = {} # {occupation: (weighted score, code)}
+    for occupation in G.nodes():
+        # 1. Collect Skills Covered values across ALL specified skills
+        skill_values = []
+        code_value = None  # Store code
+
+        for skill in user_skills:
+            if skill in data:
+                skill_df = data[skill] #Get the skill data frame
+                if occupation in skill_df['Occupation'].values:
+                    skill_row = skill_df[skill_df['Occupation'] == occupation].iloc[0] #Get row
+                    skills_covered = skill_row['Skills Covered'] #Skills Covered.
+                    skill_values.append(skills_covered)
+                    code = skill_row['Code']
+                    if code_value is None: #Setting the code to something
+                      code_value = code
+                else:
+                    skill_values.append(0)  # Assign zero if skill not found
+
+        # 2. Calculate the average
+        average_weighted_score = sum(skill_values) / len(skill_values) if skill_values else 0
+        occupation_scores[occupation] = (average_weighted_score, code_value)
+
+    #Sorting by Weighted Score:
+    ranked_careers = sorted(occupation_scores.items(), key=lambda item: item[1][0], reverse=True)
+
+    return ranked_careers
+
+def recommend_careers(ranked_careers, num_recommendations=10):
+    #   Recommends the top N careers based on the overall match scores.
+    if not ranked_careers:
+        print("No careers to recommend. Check input data.")
+        return []
+
+    top_careers = []
+    for career, (score, code)  in ranked_careers[:num_recommendations]: #CHANGED: Now parsing score and code
+
+        top_careers.append((career, score, code))
+    return top_careers
 
 
-def add_occupation(skills_graph, node_id, row):
-    if (row['Title'], row['Data Value']) not in skills_graph.nodes[node_id]['occupations']:
-        skills_graph.nodes[node_id]['occupations'].append((row['Title'], row['Data Value']))
+def main():
+    #   Main function to drive the career recommendation process.
+    data_dir = "data/softskills"  # Specify the directory
+    data, soft_skills_list = load_and_preprocess_data(data_dir)
 
-def add_neighbor(skills_graph, group, neighbor_idx, current_node, row):
-    neighbor_node = group.iloc[neighbor_idx]['Element ID']
-    # we dont' want loops to self
-    if current_node == neighbor_node:
+    if data is None:
+        print("Failed to load data. Exiting.")
         return
 
-    if not skills_graph.has_node(neighbor_node):
-        skills_graph.add_node(neighbor_node, label=group.iloc[neighbor_idx]['Element Name'], occupations=[])
-        
-    add_occupation(skills_graph, neighbor_node, row)
+    G = create_career_network(data)
 
-    if not skills_graph.has_edge(current_node, neighbor_node):
-        skills_graph.add_edge(current_node, neighbor_node)
-        skills_graph[current_node][neighbor_node]["weight"] = 0
+    print("Number of nodes:", G.number_of_nodes())
+    print("Number of edges:", G.number_of_edges())
 
-    skills_graph[current_node][neighbor_node]["weight"] = skills_graph[current_node][neighbor_node]["weight"] + 1
+    # Get user input for skills
+    print(f"Enter your soft skills (comma-separated, e.g., {', '.join(soft_skills_list)}):")
+    user_skills_input = input()
+    user_skills = [skill.strip() for skill in user_skills_input.split(",")]
 
-def build_skills_graph(path_to_skills):
-    df = pd.read_excel(path_to_skills)
+    # Validate user skills, remove the skill if it isn't a valid one.
+    valid_skills = soft_skills_list
+    user_skills = [skill for skill in user_skills if skill in valid_skills]
 
-    # only use skills with importance greater than 2.5
-    filtered_df = df[df['Scale ID'] == 'IM'][df['Data Value'] > 2.5]
-    filtered_df = filtered_df.reset_index()
-    
-    # group data by O*NET-SOC Code so we can then iterate over each skill in each occupation
-    grouped_df = filtered_df.groupby('O*NET-SOC Code')
+    ranked_careers = calculate_overall_match(G, user_skills, data)
 
-    skills_graph = nx.Graph()
+    if not ranked_careers:
+        print("No matching careers found.")
+        return
 
-    for code, group in grouped_df:
-        # iterate over all groups (one group represents one occupation)
-        index = 0
-        for row_idx, row in group.iterrows():
-            # iterate over all skills in a occupations
-            # and add an edge between skills in the same occupation if it doesn't exist
-            # increase weight for every additional time two skills belong to the same occupation
-            current_node = row['Element ID']
-            if not skills_graph.has_node(current_node):
-                skills_graph.add_node(current_node, label=row['Element Name'], occupations=[])
-                
-            add_occupation(skills_graph, current_node, row)
+    recommended_careers = recommend_careers(ranked_careers)
 
-            for neighbor_idx in range(index+1, group.count()['index']):
-                add_neighbor(skills_graph, group, neighbor_idx, current_node, row)
+    # Create a PrettyTable object
+    table = PrettyTable()
+    table.field_names = ["Occupation", "Code", "Avg. Skills Covered"]
 
-            index = index+1
-    return skills_graph
-    
+    # Add data rows to the table
+    for career, score, code in recommended_careers:
+        table.add_row([career, code, f"{score:.2f}"])
 
-skills_graph = build_skills_graph("data/Skills.xlsx")
-selected_skill = input("Enter the code of a skill: ")
-edges = skills_graph.edges(selected_skill, data=True)
-edges = sorted(edges, reverse=True, key=lambda edge: edge[2].get('weight', 1))
+    # Print the table
+    print("\nRecommended Careers:")
+    print(table)
 
-print(f'\nOften used skills with "{skills_graph.nodes[selected_skill]['label']} ({selected_skill})":')
-occupations_selected = skills_graph.nodes[selected_skill]["occupations"]
-for edge in edges[:10]:
-    occupations = skills_graph.nodes[edge[1]]['occupations']
-    intersection = sorted(list(set(occupations_selected) & set(occupations)), reverse=True, key=lambda prof: prof[1])
-    print(f'"{skills_graph.nodes[edge[1]]['label']} ({edge[1]})" e.g. as {", ".join([f'{occup[0]} ({occup[1]})' for occup in intersection[:5]])}')
-    print("\n")
-
-
+main()
