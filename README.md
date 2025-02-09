@@ -76,3 +76,11 @@ This folder contains a number of data files. The files have been downloaded from
 
 This repository is intentially left pretty barebone, so you can use it for all the assignments in CAS502.
 >>>>>>> 723d8c5c974f113c03b54868eee60c8a8a1838a5
+
+
+## Assignment 4: Dependency Management Write-Up
+As I (Ken Nelson) have stated in the past, I cannot stand python as a language. The tools are horrible, pip being a prime example. That said
+we used to pip to assist in creating the requirements.txt file, although we are not certain that it accurately reflected the projects
+dependencies. We had to manually enter a number of dependencies that the pip freeze command missed. We also added a dependencies.txt file
+to list all the dependency versions, although we feel that is inadequate as well. In reading some online forums, pip freeze is not seen
+as a good solution to use (read: https://medium.com/@tomagee/pip-freeze-requirements-txt-considered-harmful-f0bce66cf895).
