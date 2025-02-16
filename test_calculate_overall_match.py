@@ -76,3 +76,4 @@ class TestCalculateOverallMatch(unittest.TestCase):
 if __name__ == '__main__':
     # import networkx as nx #This is a MUST, it has to import networkx
     unittest.main()
+
