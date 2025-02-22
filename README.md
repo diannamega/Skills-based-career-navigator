@@ -38,12 +38,6 @@ This is a starter repository for projects in the CAS502 class in the School of C
 
 This Python script analyzes soft skills data to recommend potential careers. It loads data from CSV files, creates a network of occupations based on shared codes, allows users to input their soft skills, and then ranks occupations based on how well their required skills match the user's. Finally, it presents the top recommended careers in a neatly formatted table, displaying the occupation, associated code, and the average of the relevant "Skills Covered" percentages.
 
-```
-Often used skills with "Active Learning (2.A.2.b)":
-"Active Listening (2.A.1.b)" e.g. as Judges, Magistrate Judges, and Magistrates (5.0), Marriage and Family Therapists (4.88), Child, Family, and School Social Workers (4.88), Editors (4.88), Historians (4.75)
-...
-```
-
 ## Set up
 
 To set up the project, clone the repository. You need the following packages installed:
@@ -56,7 +50,43 @@ See [Installation Guide](Install.md) for more information.
 
 ## How to run the code
 
-To execute the tool, simply run `python skills.py`. It will run for a few moments and then ask you for a skill code. You can find the codes for each skill in the file `skills-list.csv` (e.g. `2.A.1.a` for "Reading Comprehension"). Once entered, the program will present you with a list of 10 skills are that are most often used in combination with the entered skill and the top five professions in which a skill is important for.
+To execute the tool, simply 
+Open a command prompt (Windows) or Terminal (Linux/Mac)
+run `python skills.py`. It will run for a few moments and then ask you for a skill code. You can find the codes for each skill in the file `skills-list.csv` (e.g. `2.A.1.a` for "Reading Comprehension"). Once entered, the program will present you with a list of 10 skills are that are most often used in combination with the entered skill and the top five professions in which a skill is important for.
+
+## User Documentation
+
+Follow the how to run the code section above. Then you, the user, will be prompted to enter one or more soft skills. The available soft skills are available as part of the prompt.
+
+```
+Enter your soft skills (comma-separated, e.g., learningstrategy, social, timemanagement, instructing, coordination, pursuasion, criticalthinking, negotiating, service, listening, monitoring, problemsolving, learning, decisionmaking):
+```
+
+Enter one or more soft skills (input), such as:
+```
+instructing, listening, problemsolving
+```
+
+The script will analyze your selected soft skills and provide you a list of recommended occupations to pursue (output).
+```
+ecommended Careers:
++---------------------------------------------------------------+------+---------------------+
+|                           Occupation                          | Code | Avg. Skills Covered |
++---------------------------------------------------------------+------+---------------------+
+|               Chemistry Teachers, Postsecondary               | None |         0.00        |
+|                     Mechatronics Engineers                    | None |         0.00        |
+|                         Sales Managers                        | None |         0.00        |
+|                  Forensic Science Technicians                 | None |         0.00        |
+| Administrative Law Judges, Adjudicators, and Hearing Officers | None |         0.00        |
+|                Obstetricians and Gynecologists                | None |         0.00        |
+|                  Biofuels Production Managers                 | None |         0.00        |
+|                      Mechanical Drafters                      | None |         0.00        |
+|                       Robotics Engineers                      | None |         0.00        |
+|            Library Science Teachers, Postsecondary            | None |         0.00        |
++---------------------------------------------------------------+------+---------------------+
+```
+
+
 
 ## Repository content
 
@@ -66,16 +96,8 @@ The following files are part of this repository:
 The code for this program.
 - `skills-list.csv`  
 CSV file with a list of skills and their codes.
-- `data`  
-This folder contains a number of data files. The files have been downloaded from [O*NET Resource Center](https://www.onetcenter.org/database.html), version 29.1 ([license](https://creativecommons.org/licenses/by/4.0/)). The file currently used in the code is `Skills.xlsx`. Additionally, there are two files in this folder:
-  - `Occupation Data.xlsx`: Descriptions for each occupation.
-  - `TechnologySkills.xlsx`: A list of technological skills for each occupation.
-
-## Notes
-
-This repository is intentially left pretty barebone, so you can use it for all the assignments in CAS502.
->>>>>>> 723d8c5c974f113c03b54868eee60c8a8a1838a5
-
+- `data`
+-- coordination.csv
 
 ## Assignment 4: Dependency Management Write-Up
 As I (Ken Nelson) have stated in the past, I cannot stand python as a language. The tools are horrible, pip being a prime example. That said
