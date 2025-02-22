@@ -84,3 +84,7 @@ we used to pip to assist in creating the requirements.txt file, although we are 
 dependencies. We had to manually enter a number of dependencies that the pip freeze command missed. We also added a dependencies.txt file
 to list all the dependency versions, although we feel that is inadequate as well. In reading some online forums, pip freeze is not seen
 as a good solution to use (read: https://medium.com/@tomagee/pip-freeze-requirements-txt-considered-harmful-f0bce66cf895).
+
+
+## License Selection
+We are applying the MIT license for a collaborative, open-source environment. This will make the project freely available to anyone to use, modify, or distribute the code. This encourages contributions and ensures the software can be used in both personal and commercial projects without restrictions.
