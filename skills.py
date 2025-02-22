@@ -72,14 +72,42 @@ def create_career_network(data):
                 G.nodes[occupation]['skills'].append(skill)
     return G
 
+"""
+    Calculates overall match scores for each occupation based on user-provided skills and Skills Covered values.
+
+    This function iterates through each occupation in the graph, calculates a weighted score
+    based on the user's selected skills and the corresponding Skills Covered values,
+    and then ranks the occupations based on these scores.
+    Args:
+        G (nx.Graph): The career network graph.
+        user_skills (list): A list of soft skills provided by the user.
+        data (dict): A dictionary where keys are skill names and values are pandas DataFrames,
+                     containing 'Occupation', 'Code', and 'Skills Covered' columns.
+    Returns:
+        list: A list of tuples, where each tuple contains:
+            - occupation (str): The name of the occupation.
+            - (average_weighted_score, code_value) (tuple):
+                - average_weighted_score (float): The calculated average weighted score for the occupation.
+                - code_value (str): The code associated with the occupation (taken from the first matching skill).
+        The list is sorted in descending order based on the average weighted score.
+    [kdnelso7]
+"""
 def calculate_overall_match(G, user_skills, data):
     #   Calculate overall match scores based on the created network and Skills Covered.
     occupation_scores = {} # {occupation: (weighted score, code)}
+
+    
+    # Collect relevant Skills Covered values, considering only user-specified skills:
+    # Iterates through each user-provided skill and, if the occupation is associated with that skill
+    # in the loaded data, retrieves the Skills Covered value. If the occupation does not have
+    # a Skills Covered value for a given skill, a default value of 0 is used to handle missing data.
+    # [kdnelso7]
     for occupation in G.nodes():
-        # 1. Collect Skills Covered values across ALL specified skills
         skill_values = []
         code_value = None  # Store code
 
+        # Iterate through each skill provided by the user to find the Skills Covered value for the current occupation.
+        # [kdnelso7]
         for skill in user_skills:
             if skill in data:
                 skill_df = data[skill] #Get the skill data frame
@@ -93,15 +121,41 @@ def calculate_overall_match(G, user_skills, data):
                 else:
                     skill_values.append(0)  # Assign zero if skill not found
 
-        # 2. Calculate the average
+        # Calculate the average score for the occupation based on the user-provided skills.
+        # If no Skills Covered values are found, the average is set to 0.
+        # [kdnelso7]
+    #   The average weighted score is calculated by summing the Skills Covered values for each skill
         average_weighted_score = sum(skill_values) / len(skill_values) if skill_values else 0
         occupation_scores[occupation] = (average_weighted_score, code_value)
 
-    #Sorting by Weighted Score:
+    # Sort the occupations based on the average weighted score in descending order.
     ranked_careers = sorted(occupation_scores.items(), key=lambda item: item[1][0], reverse=True)
 
     return ranked_careers
 
+
+"""
+    Recommends the top N careers from a ranked list, based on their overall match scores.
+
+    This function takes a list of ranked careers (occupation, score, code) and returns a list
+    containing the top N careers, where N is determined by the 'num_recommendations' parameter.
+    If the input list is empty, it prints a message and returns an empty list.
+    Args:
+        ranked_careers (list): A list of tuples, where each tuple contains:
+            - career (str): The name of the occupation.
+            - (score, code) (tuple):
+                - score (float): The average weighted score for the occupation.
+                - code (str): The code associated with the occupation.
+        num_recommendations (int): The number of top careers to recommend (default is 10).
+    Returns:
+        list: A list of tuples, where each tuple contains:
+            - career (str): The name of the occupation.
+            - (score, code) (tuple):
+                - score (float): The average weighted score for the occupation.
+                - code (str): The code associated with the occupation.
+        The list contains at most 'num_recommendations' elements.
+    [kdnelso7]
+"""
 def recommend_careers(ranked_careers, num_recommendations=10):
     #   Recommends the top N careers based on the overall match scores.
     if not ranked_careers:
@@ -114,7 +168,20 @@ def recommend_careers(ranked_careers, num_recommendations=10):
         top_careers.append((career, score, code))
     return top_careers
 
+"""
+    Drives the career recommendation process by orchestrating data loading, network creation,
+    skill matching, and presentation of results.
 
+    This function performs the following steps:
+    1. Loads and preprocesses data from CSV files in a specified directory.
+    2. Creates a career network graph based on shared codes.
+    3. Prompts the user to enter their soft skills.
+    4. Validates the user's input against the available skills.
+    5. Calculates overall match scores for each occupation based on the user's skills.
+    6. Recommends the top careers based on the calculated scores.
+    7. Presents the results in a formatted table.
+    [kdnelso7]
+"""
 def main():
     #   Main function to drive the career recommendation process.
     data_dir = "data/softskills"  # Specify the directory
