@@ -36,10 +36,7 @@ This is a starter repository for projects in the CAS502 class in the School of C
 
 ## What the code does
 
-This script will read the skills in `data/Skills.xlsx` (which is pretty much a list of types of jobs and what skills each job requires) and create a weighted graph from it. Each skill is identified by an "Element ID" of the form `Number.Letter.Number.letter` (e.g. `2.A.1.a`). The script will create a node for each skill id and if two skills are used in the same job type, the nodes will be connected. The more often two skills are used together for a job type, the greater the weight on the edge between those two nodes. The resulting network looks something like that (darker and thicker edges have more weight):
-![Network Image](img/networkjpg.jpg)
-
-After creating the network, the script will ask the user for a skill id and then print the first 10 skills most often used with the entered skill and 5 job types in which both skills are used, e.g.
+This Python script analyzes soft skills data to recommend potential careers. It loads data from CSV files, creates a network of occupations based on shared codes, allows users to input their soft skills, and then ranks occupations based on how well their required skills match the user's. Finally, it presents the top recommended careers in a neatly formatted table, displaying the occupation, associated code, and the average of the relevant "Skills Covered" percentages.
 
 ```
 Often used skills with "Active Learning (2.A.2.b)":
@@ -54,6 +51,8 @@ To set up the project, clone the repository. You need the following packages ins
 - [openpyxl](https://openpyxl.readthedocs.io/en/2.5/index.html)
 - [networkx](https://networkx.org/)
 - [matplotlib](https://matplotlib.org/)
+
+See [Installation Guide](Install.md) for more information.
 
 ## How to run the code
 
