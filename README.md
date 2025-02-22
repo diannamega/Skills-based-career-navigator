@@ -86,6 +86,7 @@ ecommended Careers:
 +---------------------------------------------------------------+------+---------------------+
 ```
 
+For more information visit the respository [Wiki](https://github.com/diannamega/Skills-based-career-navigator/wiki).
 
 
 ## Repository content
