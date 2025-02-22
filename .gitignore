@@ -7,6 +7,10 @@ yarn-error.log*
 
 *.DS_Store
 
+# Python compiled files
+__pycache__/
+*.pyc
+
 # out
 *.out
 
