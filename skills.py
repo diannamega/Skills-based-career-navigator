@@ -3,6 +3,20 @@ import networkx as nx
 import os
 from prettytable import PrettyTable
 
+"""
+    Loads and preprocesses CSV files from a specified directory, extracting skill names
+    and cleaning the 'Skills Covered' column to be a numeric representation.
+    Args:
+        data_dir (str): The path to the directory containing the CSV files.
+    Returns:
+        tuple: A tuple containing:
+            - data (dict): A dictionary where keys are skill names (extracted from filenames)
+                           and values are pandas DataFrames representing the CSV data.  
+                           Returns None if any file loading fails.
+            - soft_skills_list (list): A list of skill names (strings) extracted from the CSV filenames. 
+                            Returns None if any file loading fails.
+    [dmega]
+"""
 def load_and_preprocess_data(data_dir):
     #   Loads and preprocesses the CSV files from the specified directory.
     data = {}
@@ -10,7 +24,10 @@ def load_and_preprocess_data(data_dir):
     try:
         for filename in os.listdir(data_dir):
             if filename.endswith(".csv"):
-                skill_name = filename[:-4]  # Remove ".csv" to get skill name
+                # Remove ".csv" to get skill name
+                # The skill name is the filename without the extension
+                #[dmega]
+                skill_name = filename[:-4]  
                 filepath = os.path.join(data_dir, filename)
                 df = pd.read_csv(filepath)
 
@@ -25,24 +42,46 @@ def load_and_preprocess_data(data_dir):
         print(f"Error loading data from {data_dir}: {e}")
         return None, None
 
+    # Return the data dictionary and the list of soft skills
+    # See comment above for the return format
+    # [dmega]
     return data, soft_skills_list
 
+"""
+    Creates a career network graph linking occupations based on shared codes.
+
+    The graph represents occupations as nodes, with edges connecting occupations that share a code,
+    and stores the associated skills as a node attribute.
+    Args:
+        data (dict): A dictionary where keys are skill names and values are pandas DataFrames,
+                     containing 'Occupation' and 'Code' columns.
+    Returns:
+        nx.Graph: A networkx graph where:
+            - Nodes represent occupations.
+            - Edges connect occupations that share a code.
+            - Each node has a 'skills' attribute: a list of skills associated with the occupation.
+    [dmega]
+"""
 def create_career_network(data):
     # Creates a career network graph, linking Occupations based on shared skills.    
     G = nx.Graph()
 
     # 1. Add nodes for each unique occupation (using Occupation as the node identifier)
+    #    This ensures each occupation is represented in the graph, even if it doesn't share a code with others.
+    # [dmega]
     all_occupations = set()
     for skill_df in data.values():
         for occupation in skill_df['Occupation'].unique():
             all_occupations.add(occupation)
 
+    # 2. Add edges between Occupations sharing a Code
+    #    This is the core logic for creating the network structure.  It iterates through all
+    #    skills and connects occupations that share a code, creating an edge between them.    for skill, skill_df in data.items():
+    # [dmega]
     for occupation in all_occupations:
         G.add_node(occupation)  # Add the occupation if it is new
 
-    # 2. Add edges between Occupations sharing a Code
-    for skill, skill_df in data.items():
-      #For each CSV file
+        #For each CSV file
         for index, row in skill_df.iterrows():
             #For each row in a single CSV File
             occupation = row['Occupation']
@@ -60,12 +99,17 @@ def create_career_network(data):
                                 G.add_edge(occupation, other_occupation)
 
     # 3. Populate the 'skills' attribute for each occupation (AFTER creating edges)
+    #    This step ensures that each node in the graph has a list of associated skills,
+    #    making it easy to look up the skills for a given occupation later on.
+    # [dmega]
     for skill, skill_df in data.items():
         for occupation in skill_df['Occupation'].unique():
             if occupation in G.nodes():
                 G.nodes[occupation]['skills'] = []
 
-    #Now update it!
+    # Populate the 'skills' attribute for each occupation
+    # Add each skill after ensuring it is a node
+    # [dmega]
     for skill, skill_df in data.items():
         for occupation in skill_df['Occupation'].unique():
             if occupation in G.nodes():
