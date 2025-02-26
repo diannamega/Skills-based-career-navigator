@@ -1,4 +1,4 @@
-** MIT License **
+**MIT License**
 
 Copyright (c) 2025 [diannamega](https://github.com/diannamega) & [nelsonkd](https://github.com/nelsonkd)
 
