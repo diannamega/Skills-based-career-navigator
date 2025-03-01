@@ -8,9 +8,8 @@ class TestCreateCareerNetwork(unittest.TestCase):
     def test_create_career_network_simple(self):
         # Create mock data
         mock_data = {
-            "skill1": pd.DataFrame({"Occupation": ["Dancers"], "Code": ["27-2031.00"], "Skills Covered": [1]}),
-            "skill2": pd.DataFrame({"Occupation": ["Stonemasons"], "Code": ["47-2022.00"], "Skills Covered": [1]}),
-            "skill3": pd.DataFrame({"Occupation": ["Athletes and Sports Competitors"], "Code": ["27-2021.00"], "Skills Covered": [100]})
+            "skill1": pd.DataFrame({"Occupation": ["Occ1", "Occ2"], "Code": ["1", "1"], "Skills Covered": [0.5, 0.6]}),
+            "skill2": pd.DataFrame({"Occupation": ["Occ2", "Occ3"], "Code": ["1", "2"], "Skills Covered": [0.7, 0.8]})
         }
 
         # Call the function
@@ -19,6 +18,12 @@ class TestCreateCareerNetwork(unittest.TestCase):
         # Assert the return value
         self.assertIsInstance(G, nx.Graph)
         self.assertEqual(G.number_of_nodes(), 3)
+        self.assertEqual(G.number_of_edges(), 1)  # Occ1 and Occ2 share code "1" in skill1.
+
+        # Check skills attribute for each occupation
+        self.assertEqual(set(G.nodes["Occ1"]['skills']), {"skill1"})
+        self.assertEqual(set(G.nodes["Occ2"]['skills']), {"skill1", "skill2"})
+        self.assertEqual(set(G.nodes["Occ3"]['skills']), {"skill2"})
 
     def test_create_career_network_no_shared_codes(self):
         # Mock data where occupations do not share codes
@@ -38,11 +43,10 @@ class TestCreateCareerNetwork(unittest.TestCase):
         # Call the function
         G = create_career_network(mock_data)
 
-        print(G)
         # Assert the return value
         self.assertIsInstance(G, nx.Graph)
         self.assertEqual(G.number_of_nodes(), 10)
-        # self.assertEqual(G.number_of_edges(), 0)  # No shared codes, so no edges
+        self.assertEqual(G.number_of_edges(), 0)  # No shared codes, so no edges
 
         # Check skills attribute for each occupation
         self.assertEqual(set(G.nodes["Dancers"]['skills']), {"skill1"})
@@ -56,7 +60,6 @@ class TestCreateCareerNetwork(unittest.TestCase):
         self.assertEqual(set(G.nodes["Roof Bolters, Mining"]['skills']), {"skill9"})
         self.assertEqual(set(G.nodes["Roofers"]['skills']), {"skill10"})
 
-
     def test_create_career_network_empty_data(self):
         # Test with empty input data
         mock_data = {}
@@ -69,5 +72,26 @@ class TestCreateCareerNetwork(unittest.TestCase):
         self.assertEqual(G.number_of_nodes(), 0)
         self.assertEqual(G.number_of_edges(), 0)
 
+    def test_create_career_network_all_share_codes(self):
+        # Create mock data
+        mock_data = {
+            "skill1": pd.DataFrame({"Occupation": ["Occ1", "Occ2", "Occ3", "Occ4"], "Code": ["1", "1", "1", "1"], "Skills Covered": [0.5, 0.6, 0.7, 0.8]}),
+        }
+
+        # Call the function
+        G = create_career_network(mock_data)
+
+        # Assert the return value
+        self.assertIsInstance(G, nx.Graph)
+        self.assertEqual(G.number_of_nodes(), 4)
+        self.assertEqual(G.number_of_edges(), 6)  # All combinations
+
+        # Check skills attribute for each occupation
+        self.assertEqual(set(G.nodes["Occ1"]['skills']), {"skill1"})
+        self.assertEqual(set(G.nodes["Occ2"]['skills']), {"skill1"})
+        self.assertEqual(set(G.nodes["Occ3"]['skills']), {"skill1"})
+        self.assertEqual(set(G.nodes["Occ4"]['skills']), {"skill1"})
+
 if __name__ == '__main__':
+    import networkx as nx
     unittest.main()
