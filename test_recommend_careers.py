@@ -1,5 +1,5 @@
 import unittest
-from skills_optimized import recommend_careers  # Import the function
+from skills import recommend_careers  # Import the function
 
 class TestRecommendCareers(unittest.TestCase):
 
