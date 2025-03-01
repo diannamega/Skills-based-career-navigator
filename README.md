@@ -54,6 +54,9 @@ To execute the tool, simply
 Open a command prompt (Windows) or Terminal (Linux/Mac)
 run `python skills.py`. It will run for a few moments and then ask you for a skill code. You can find the codes for each skill in the file `skills-list.csv` (e.g. `2.A.1.a` for "Reading Comprehension"). Once entered, the program will present you with a list of 10 skills are that are most often used in combination with the entered skill and the top five professions in which a skill is important for.
 
+## How to test the code
+To test the code follow the instructions in the [Testing Guide for the Skills-Based Career Navigator](Testing.md)
+
 ## User Documentation
 
 Follow the how to run the code section above. Then you, the user, will be prompted to enter one or more soft skills. The available soft skills are available as part of the prompt.
